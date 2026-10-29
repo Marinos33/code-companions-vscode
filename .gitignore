@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Build output: the .vsix goes to GitHub Releases, not the repo
+*.vsix
+
+# Backups and OS files
+*.bak
+.DS_Store
+Thumbs.db

@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- The pet page outside VS Code, for checking a character and its reactions in a browser:
+     serve vscode-extension/ (node test/serve.js) and open /test/preview.html -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Code Companions preview</title>
+  <link rel="stylesheet" href="../media/pet.css">
+  <style>
+    body { background: #1e1e1e; font: 13px system-ui, sans-serif; color: #ccc; }
+    .panel { width: 320px; border: 1px solid #333; margin: 12px; }
+    .buttons { margin: 12px; display: flex; flex-wrap: wrap; gap: 6px; max-width: 520px; }
+    button { background: #333; color: #ddd; border: 1px solid #555; padding: 4px 8px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="panel"><div id="stage"><div id="bubble" hidden></div><canvas id="pet"></canvas></div></div>
+  <div class="buttons" id="buttons"></div>
+  <script src="../media/pet.js"></script>
+  <script>
+    // The reactions src/behaviors.js gives for these events (copied: this page has no require).
+    const reactions = {
+      thinking: { behavior: 'thinking', anim: 'failed', line: 'Pondering very hard…', sticky: true },
+      editing: { behavior: 'editing', anim: 'review', line: 'Scribbling furiously…', sticky: true },
+      reading: { behavior: 'reading', anim: 'waiting', line: 'Peeking at the file…', sticky: true },
+      searching: { behavior: 'searching', anim: 'runLeft', line: 'Hunting for clues…', sticky: true },
+      shell: { behavior: 'shell', anim: 'running', line: 'Vibing with the terminal…', sticky: true },
+      delegating: { behavior: 'delegating', anim: 'jumping', line: 'Sending little helpers…', sticky: true },
+      asking: { behavior: 'asking', anim: 'waiting', line: 'Waiting for you…', sticky: true },
+      oops: { behavior: 'oops', anim: 'failed', line: 'Oops, that stumbled…', sticky: true },
+      done: { behavior: 'done', anim: 'jumping', line: 'All done!', sticky: false, ms: 2500 },
+      idle: { behavior: 'idle', anim: 'idle', line: '', sticky: false },
+    }
+    const box = document.getElementById('buttons')
+    for (const [name, reaction] of Object.entries(reactions)) {
+      const b = document.createElement('button')
+      b.textContent = name
+      b.onclick = () => petTest.receive({ type: 'react', reaction })
+      box.append(b)
+    }
+    petTest.receive({ type: 'setup', size: 120, speechBubble: true, wander: true, character: { id: 'aemeath-mini', name: 'Aemeath Mini', sheet: '../characters/aemeath-mini/spritesheet.webp' } })
+  </script>
+</body>
+</html>

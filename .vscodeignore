@@ -1,0 +1,6 @@
+test/**
+*.vsix
+.vscode/**
+CLAUDE.md
+.gitignore
+.gitattributes

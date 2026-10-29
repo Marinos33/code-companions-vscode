@@ -1,0 +1,66 @@
+{
+  "name": "code-companions",
+  "displayName": "Code Companions",
+  "description": "A pixel pet in VS Code that reacts to what Claude Code is doing: thinking, editing, reading, running commands, waiting for you.",
+  "version": "0.1.0",
+  "publisher": "marinos33",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/Marinos33/code-companions-vscode.git" },
+  "bugs": { "url": "https://github.com/Marinos33/code-companions-vscode/issues" },
+  "homepage": "https://github.com/Marinos33/code-companions-vscode#readme",
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["Other"],
+  "keywords": ["pet", "claude", "claude code", "codex pet", "companion"],
+  "main": "./extension.js",
+  "scripts": {
+    "test": "node --test test/unit.test.js"
+  },
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "views": {
+      "explorer": [
+        { "type": "webview", "id": "codeCompanions.view", "name": "Code Companions" }
+      ]
+    },
+    "commands": [
+      { "command": "codeCompanions.connect", "title": "Connect to Claude Code", "category": "Code Companions" },
+      { "command": "codeCompanions.disconnect", "title": "Disconnect from Claude Code", "category": "Code Companions" },
+      { "command": "codeCompanions.pickCharacter", "title": "Pick a Character", "category": "Code Companions" },
+      { "command": "codeCompanions.addCharacterFolder", "title": "Add a Folder of Characters…", "category": "Code Companions" },
+      { "command": "codeCompanions.testReactions", "title": "Play Every Reaction", "category": "Code Companions" }
+    ],
+    "configuration": {
+      "title": "Code Companions",
+      "properties": {
+        "codeCompanions.character": {
+          "type": "string",
+          "default": "aemeath-mini",
+          "description": "The id of the character to show (from its pet.json)."
+        },
+        "codeCompanions.characterFolders": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Folders holding more characters: Codex pet folders (pet.json + spritesheet), each in its own sub-folder."
+        },
+        "codeCompanions.size": {
+          "type": "number",
+          "default": 120,
+          "minimum": 48,
+          "maximum": 400,
+          "description": "The pet's height in pixels."
+        },
+        "codeCompanions.speechBubble": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show what Claude is doing in a speech bubble above the pet."
+        },
+        "codeCompanions.wander": {
+          "type": "boolean",
+          "default": true,
+          "description": "Let the pet walk around while Claude is idle."
+        }
+      }
+    }
+  }
+}
