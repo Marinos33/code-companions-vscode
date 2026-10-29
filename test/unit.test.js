@@ -116,7 +116,7 @@ test('characters are found in the built-in folder and added folders, first id wi
   const extra = tmp()
   const pet = path.join(extra, 'other-pet')
   fs.mkdirSync(pet)
-  fs.writeFileSync(path.join(pet, 'pet.json'), JSON.stringify({ id: 'other', displayName: 'Other', spritesheetPath: 'sheet.webp' }))
+  fs.writeFileSync(path.join(pet, 'pet.json'), JSON.stringify({ id: 'other', displayName: 'Other', spritesheetPath: 'sheet.webp', extraRows: { asking: 6, idle: 6, huge: 9 }, loopFrom: { jumping: 2, waving: 'x', flying: 1, asking: 1 }, frameMs: { idle: [600, 150], waving: 200, jumping: 1, review: [100, 'x'] }, lines: { done: ['Too easy!', '', 3], oops: [], hello: 'Hi' } }))
   fs.writeFileSync(path.join(pet, 'sheet.webp'), '')
   const dupe = path.join(extra, 'dupe')
   fs.mkdirSync(dupe)
@@ -127,6 +127,11 @@ test('characters are found in the built-in folder and added folders, first id wi
   const all = findCharacters([path.join(__dirname, '..', 'characters'), extra, path.join(extra, 'missing')])
   assert.deepEqual(all.map(c => c.id), ['aemeath-mini', 'other'])
   assert.equal(all[0].displayName, 'Aemeath Mini')
+  assert.deepEqual(all[0].loopFrom, {})
+  assert.deepEqual(all[1].extraRows, { asking: 6, idle: 6 })
+  assert.deepEqual(all[1].loopFrom, { jumping: 2, asking: 1 })
+  assert.deepEqual(all[1].frameMs, { idle: [600, 150], waving: 200 })
+  assert.deepEqual(all[1].lines, { done: ['Too easy!'] })
 })
 
 test('the relay records the event without tool input, and rotates a big file', () => {

@@ -43,7 +43,12 @@ terminal.
   `codeCompanions.background` enum in `package.json` (and `README.md`'s settings table).
 - **Characters:** Codex pet folders, built in under `characters/` or added with the setting
   `codeCompanions.characterFolders`. Frame counts are the Codex atlas' `[6,8,8,4,5,8,6,6,6]`.
-  Adding one needs no code.
+  Adding one needs no code. Four `pet.json` fields of ours: `extraRows` (`{ "asking": 4 }`) adds
+  rows below the nine, each named after the behaviour it plays instead of the shared row (or
+  after one of the nine, which it then replaces: a longer `idle`),
+  `loopFrom` (`{ "jumping": 2 }`) plays a row's first frames once, then loops from that frame,
+  `frameMs` (`{ "idle": 200 }`, or a list per frame) changes the 125 ms a frame stays up, and
+  `lines` (`{ "done": ["Too easy!"] }`) replaces the shared speech-bubble lines of a behaviour.
 
 ## Rules
 

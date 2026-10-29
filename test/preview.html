@@ -41,21 +41,33 @@
       box.append(b)
     }
     // ?bg=night (or desk, sakura, city, reactive) picks the scene, ?w= and ?h= the view's size,
-    // ?react=thinking (or another button's name) a reaction to start with.
+    // ?react=thinking (or another button's name) a reaction to start with, ?pet= another
+    // character's pet.json (a path the server serves).
     const params = new URLSearchParams(location.search)
     let background = params.get('bg') || 'none'
     const panel = document.querySelector('.panel')
     if (params.get('w')) panel.style.width = `${params.get('w')}px`
     if (params.get('h')) panel.style.height = `${params.get('h')}px`
-    const setup = () => petTest.receive({ type: 'setup', size: 120, speechBubble: true, wander: true, background, character: { id: 'aemeath-mini', name: 'Aemeath Mini', sheet: '../characters/aemeath-mini/spritesheet.webp' } })
+    let character = { id: 'aemeath-mini', name: 'Aemeath Mini', sheet: '../characters/aemeath-mini/spritesheet.webp' }
+    const setup = () => petTest.receive({ type: 'setup', size: 120, speechBubble: true, wander: true, background, character })
     const scene = document.getElementById('scene')
     for (const name of ['none', ...Object.keys(petBackgrounds)]) scene.append(new Option(name, name, false, name === background))
     scene.onchange = () => {
       background = scene.value
       setup()
     }
-    setup()
-    if (reactions[params.get('react')]) petTest.receive({ type: 'react', reaction: reactions[params.get('react')] })
+    const start = () => {
+      setup()
+      if (reactions[params.get('react')]) petTest.receive({ type: 'react', reaction: reactions[params.get('react')] })
+    }
+    const petFile = params.get('pet')
+    if (petFile) {
+      fetch(petFile).then(r => r.json()).then(pet => {
+        const sheet = new URL(pet.spritesheetPath || 'spritesheet.webp', new URL(petFile, location.href)).href
+        character = { id: pet.id, name: pet.displayName || pet.id, sheet, extraRows: pet.extraRows || {}, loopFrom: pet.loopFrom || {}, frameMs: pet.frameMs || {}, lines: pet.lines || {} }
+        start()
+      })
+    } else start()
   </script>
 </body>
 </html>

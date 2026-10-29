@@ -31,11 +31,19 @@
   let isBubbleOn = true
   let isWanderOn = true
   let scene = null
+  let loopFrom = {}
+  let frameMs = {}
+  let lines = {}
+  // The atlas' rows and their frame counts: the Codex nine, then the character's own, if any. A
+  // row of the character's named like one of the nine replaces it, so rows are found from the end.
+  let rows = ROWS
+  let frameCounts = FRAME_COUNTS
+  const rowOf = anim => rows.lastIndexOf(anim)
   let bgScale = 1
   const pet = { x: 0, targetX: 0, anim: 'idle', frame: 0, mode: 'idle', until: 0, line: '', isSticky: false, behavior: 'idle' }
 
   const frameW = () => sheet.naturalWidth / 8
-  const frameH = () => sheet.naturalHeight / 9
+  const frameH = () => sheet.naturalHeight / rows.length
   const petW = () => Math.round((size * frameW()) / frameH())
 
   function fitSize() {
@@ -68,6 +76,13 @@
       pet.x = Math.min(Math.max(0, pet.x), maxX)
       pet.targetX = Math.min(Math.max(0, pet.targetX), maxX)
     }
+  }
+
+  // How long a frame stays up: the character's `frameMs` for its row (one for all its frames, or
+  // one each), else the Codex pace.
+  function msOf(anim, frame) {
+    const ms = frameMs[anim]
+    return (Array.isArray(ms) ? ms[frame] : ms) || FRAME_MS
   }
 
   function setAnim(anim) {
@@ -117,21 +132,29 @@
     pet.mode = 'react'
     pet.isSticky = !!reaction.sticky
     pet.behavior = reaction.behavior
-    setAnim(reaction.anim)
-    say(reaction.line)
+    // A character's own row for this behaviour beats the row every character shares.
+    setAnim(rowOf(reaction.behavior) >= ROWS.length ? reaction.behavior : reaction.anim)
+    // The character's own words for this behaviour, if it has some: the same one for a few
+    // seconds, like the shared lines, so a burst of tool calls does not flicker through them.
+    const own = lines[reaction.behavior]
+    say(own ? own[Math.floor(Date.now() / 4000) % own.length] : reaction.line)
     pet.until = now + (reaction.sticky ? STICKY_MAX_MS : reaction.ms || 2000)
   }
 
   let last = performance.now()
   let frameClock = 0
   function tick(now) {
-    const dt = now - last
+    // A hidden view gets no frames: on its return, carry on rather than race through the time
+    // missed (and through a reaction's opening frames).
+    const dt = Math.min(now - last, 2 * FRAME_MS)
     last = now
     if (sheet) {
       frameClock += dt
-      while (frameClock >= FRAME_MS) {
-        frameClock -= FRAME_MS
-        pet.frame = (pet.frame + 1) % FRAME_COUNTS[ROWS.indexOf(pet.anim)]
+      while (frameClock >= msOf(pet.anim, pet.frame)) {
+        frameClock -= msOf(pet.anim, pet.frame)
+        // At the row's end, back to its first frame or to the character's `loopFrom` for it.
+        const count = frameCounts[rowOf(pet.anim)]
+        pet.frame = pet.frame + 1 < count ? pet.frame + 1 : Math.min(loopFrom[pet.anim] || 0, count - 1)
       }
       if (pet.mode === 'walk') {
         const step = (WALK_PX_PER_S * dt) / 1000
@@ -161,7 +184,7 @@
       scene(bgCtx, bg.width, bg.height, now, pet.behavior)
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    const row = ROWS.indexOf(pet.anim)
+    const row = rowOf(pet.anim)
     ctx.drawImage(sheet, pet.frame * frameW(), row * frameH(), frameW(), frameH(), Math.round(pet.x), 0, w, size)
     if (!bubble.hidden) {
       const bw = bubble.offsetWidth
@@ -175,6 +198,13 @@
     isBubbleOn = message.speechBubble !== false
     isWanderOn = message.wander !== false
     scene = (window.petBackgrounds || {})[message.background] || null
+    loopFrom = message.character.loopFrom || {}
+    frameMs = message.character.frameMs || {}
+    lines = message.character.lines || {}
+    const extra = message.character.extraRows || {}
+    rows = [...ROWS, ...Object.keys(extra)]
+    frameCounts = [...FRAME_COUNTS, ...Object.values(extra)]
+    if (!rows.includes(pet.anim)) setAnim('idle')
     layout()
     const img = new Image()
     img.onload = () => {
