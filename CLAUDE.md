@@ -64,7 +64,7 @@ terminal.
   ```bash
   npm test
   ```
-  11 tests, including the relay against a throwaway home and the legacy-hook migration.
+  12 tests, including the relay against a throwaway home and the legacy-hook migration.
 - **Single test file / test:** `node --test test/unit.test.js`, add `--test-name-pattern "<name>"`
   for one test.
 - **Page preview:** run `node test/serve.js`, then open `/test/preview.html`; it has a button

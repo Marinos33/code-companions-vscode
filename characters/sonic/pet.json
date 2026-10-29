@@ -1,0 +1,92 @@
+{
+  "id": "sonic",
+  "displayName": "Sonic",
+  "description": "Sonic the Hedgehog (© SEGA), from the Sonic Advance sprite sheet shared by Lucario51 on DeviantArt. See NOTICE.md.",
+  "spritesheetPath": "spritesheet.png",
+  "extraRows": {
+    "asking": 4,
+    "oops": 4,
+    "done": 6,
+    "idle": 8
+  },
+  "loopFrom": {
+    "jumping": 2,
+    "waving": 1,
+    "failed": 7,
+    "waiting": 2,
+    "asking": 3,
+    "oops": 3,
+    "done": 5
+  },
+  "frameMs": {
+    "idle": [
+      700,
+      160,
+      260,
+      220,
+      220,
+      700,
+      220,
+      260
+    ]
+  },
+  "lines": {
+    "hello": [
+      "Hey! Ready to roll?",
+      "Let's get this going, fast!",
+      "Took you long enough!"
+    ],
+    "thinking": [
+      "Thinking at top speed…",
+      "Gimme a sec… okay, half a sec.",
+      "Figuring it out, fast…"
+    ],
+    "editing": [
+      "Rewriting this at Mach speed!",
+      "Quick fix, coming right up!",
+      "Spin-dashing through the code…"
+    ],
+    "reading": [
+      "Speed-reading…",
+      "Taking a quick look…",
+      "Skimming this in a flash…"
+    ],
+    "searching": [
+      "Racing through the folders…",
+      "Gotta find it, and fast!",
+      "Zooming through the files…"
+    ],
+    "shell": [
+      "Revving up the terminal…",
+      "Charging the spin dash…",
+      "Full throttle!"
+    ],
+    "delegating": [
+      "Calling in the team!",
+      "Sending backup!",
+      "Friends, you're up!"
+    ],
+    "asking": [
+      "Your move! Don't keep me waiting!",
+      "Hey! Over here!",
+      "C'mon, c'mon, c'mon!"
+    ],
+    "tooling": [
+      "On it!",
+      "Tinkering at top speed…"
+    ],
+    "oops": [
+      "Whoa! That wasn't cool…",
+      "Ouch… one more lap!",
+      "Missed! Running it back."
+    ],
+    "done": [
+      "Too easy!",
+      "Done! Was that too fast?",
+      "Way past cool!"
+    ],
+    "compacting": [
+      "Packing light, moving fast…"
+    ]
+  }
+}

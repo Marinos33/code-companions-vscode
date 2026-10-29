@@ -2,7 +2,7 @@
 
 A pixel companion in VS Code's Explorer that reacts to what **Claude Code** is doing: in the
 Claude Code extension's chat, and in `claude` running in VS Code's terminal. Ships with
-**Aemeath Mini**; any [Codex pet](#characters) can be your companion.
+**Aemeath Mini** and **Sonic**; any [Codex pet](#characters) can be your companion.
 
 | Claude is… | Your companion… |
 | --- | --- |
@@ -61,6 +61,11 @@ A character is a **Codex pet** folder: a `pet.json` and an 8×9 spritesheet.
 ```
 - Rows, in order: idle, run right, run left, waving, jumping, failed, waiting, running, review.
 - Frames per row: 6, 8, 8, 4, 5, 8, 6, 6, 6.
+- Optional, beyond the Codex format: `extraRows` (`{ "asking": 4 }`) adds rows below the nine
+  for one reaction (or replaces one of the nine), `loopFrom` (`{ "jumping": 2 }`) plays a row's
+  first frames once then loops the rest, `frameMs` (`{ "idle": 200 }`, or one per frame) sets
+  how long frames stay up, and `lines` (`{ "done": ["Too easy!"] }`) gives her own words.
+  `characters/sonic/pet.json` uses all four.
 
 - **Code Companions: Add a Folder of Characters…** adds a folder of characters, each in its own
   sub-folder (setting `codeCompanions.characterFolders`).
@@ -68,8 +73,8 @@ A character is a **Codex pet** folder: a `pet.json` and an 8×9 spritesheet.
 - **Code Companions: Play Every Reaction** shows every reaction, to check a character without
   running Claude Code.
 
-Built in: **Aemeath Mini** (`characters/aemeath-mini`). To ship another, add its folder to
-`characters/`.
+Built in: **Aemeath Mini** (`characters/aemeath-mini`) and **Sonic** (`characters/sonic`). To
+ship another, add its folder to `characters/`.
 
 ## Settings
 
@@ -119,6 +124,6 @@ characters/         built-in characters
 
 ## License
 
-The code is [MIT](LICENSE). The character art is **not** covered: Aemeath belongs to Kuro Games
-and the pixel art to its author; see [NOTICE.md](NOTICE.md). This is an unofficial fan project,
-not affiliated with Kuro Games or Anthropic.
+The code is [MIT](LICENSE). The character art is **not** covered: Aemeath belongs to Kuro Games,
+Sonic to SEGA, and the pixel art to its authors; see [NOTICE.md](NOTICE.md). This is an
+unofficial fan project, not affiliated with Kuro Games, SEGA or Anthropic.

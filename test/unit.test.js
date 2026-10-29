@@ -125,13 +125,25 @@ test('characters are found in the built-in folder and added folders, first id wi
   fs.mkdirSync(path.join(extra, 'no-sheet'))
   fs.writeFileSync(path.join(extra, 'no-sheet', 'pet.json'), '{"id":"broken"}')
   const all = findCharacters([path.join(__dirname, '..', 'characters'), extra, path.join(extra, 'missing')])
-  assert.deepEqual(all.map(c => c.id), ['aemeath-mini', 'other'])
+  assert.deepEqual(all.map(c => c.id), ['aemeath-mini', 'sonic', 'other'])
   assert.equal(all[0].displayName, 'Aemeath Mini')
   assert.deepEqual(all[0].loopFrom, {})
-  assert.deepEqual(all[1].extraRows, { asking: 6, idle: 6 })
-  assert.deepEqual(all[1].loopFrom, { jumping: 2, asking: 1 })
-  assert.deepEqual(all[1].frameMs, { idle: [600, 150], waving: 200 })
-  assert.deepEqual(all[1].lines, { done: ['Too easy!'] })
+  const other = all[2]
+  assert.deepEqual(other.extraRows, { asking: 6, idle: 6 })
+  assert.deepEqual(other.loopFrom, { jumping: 2, asking: 1 })
+  assert.deepEqual(other.frameMs, { idle: [600, 150], waving: 200 })
+  assert.deepEqual(other.lines, { done: ['Too easy!'] })
+})
+
+test('built-in PNG atlases split into whole cells: 8 columns, the nine rows and their own', () => {
+  for (const c of findCharacters([path.join(__dirname, '..', 'characters')])) {
+    if (!c.spritesheet.endsWith('.png')) continue
+    const png = fs.readFileSync(c.spritesheet)
+    const width = png.readUInt32BE(16)
+    const height = png.readUInt32BE(20)
+    assert.equal(width % 8, 0, c.id)
+    assert.equal(height % (ROWS.length + Object.keys(c.extraRows).length), 0, c.id)
+  }
 })
 
 test('the relay records the event without tool input, and rotates a big file', () => {
