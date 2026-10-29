@@ -45,6 +45,7 @@ To add a custom pet, add this in `pet.json`, spritesheet must be a 8×9 spritesh
 - **Code Companions: Add a Folder of Characters…** adds a folder of characters, each in its own
   sub-folder (setting `codeCompanions.characterFolders`).
 - **Code Companions: Pick a Character** switches between them (setting `codeCompanions.character`).
+- **Code Companions: Pick a Background** (or the paint-palette button in the Code Companions view title bar) switches the scene (setting `codeCompanions.background`).
 - **Code Companions: Play Every Reaction** shows every reaction, to check a character without
   running Claude Code.
 

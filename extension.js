@@ -108,6 +108,16 @@ function activate(context) {
       if (picked) await config().update('character', picked.id, vscode.ConfigurationTarget.Global)
     }),
 
+    vscode.commands.registerCommand('codeCompanions.pickBackground', async () => {
+      const property = vscode.extensions.getExtension(context.extension.id).packageJSON.contributes.configuration.properties['codeCompanions.background']
+      const current = config().get('background', 'none')
+      const picked = await vscode.window.showQuickPick(
+        property.enum.map((id, i) => ({ label: id === current ? `$(check) ${id}` : id, description: property.enumDescriptions[i], id })),
+        { placeHolder: 'Pick a background' },
+      )
+      if (picked) await config().update('background', picked.id, vscode.ConfigurationTarget.Global)
+    }),
+
     vscode.commands.registerCommand('codeCompanions.addCharacterFolder', async () => {
       const [folder] = (await vscode.window.showOpenDialog({ canSelectFolders: true, canSelectFiles: false, openLabel: 'Add characters from this folder' })) || []
       if (!folder) return

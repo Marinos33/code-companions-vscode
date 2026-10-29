@@ -2,7 +2,7 @@
   "name": "code-companions",
   "displayName": "Code Companions",
   "description": "A pixel pet in VS Code that reacts to what Claude Code is doing: thinking, editing, reading, running commands, waiting for you.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "icon": "media/icon.png",
   "publisher": "marinos33",
   "license": "MIT",
@@ -45,6 +45,15 @@
         }
       ]
     },
+    "menus": {
+      "view/title": [
+        {
+          "command": "codeCompanions.pickBackground",
+          "when": "view == codeCompanions.view",
+          "group": "navigation"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "codeCompanions.connect",
@@ -60,6 +69,12 @@
         "command": "codeCompanions.pickCharacter",
         "title": "Pick a Character",
         "category": "Code Companions"
+      },
+      {
+        "command": "codeCompanions.pickBackground",
+        "title": "Pick a Background",
+        "category": "Code Companions",
+        "icon": "$(symbol-color)"
       },
       {
         "command": "codeCompanions.addCharacterFolder",
