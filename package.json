@@ -3,6 +3,7 @@
   "displayName": "Code Companions",
   "description": "A pixel pet in VS Code that reacts to what Claude Code is doing: thinking, editing, reading, running commands, waiting for you.",
   "version": "1.0.0",
+  "icon": "media/icon.png",
   "publisher": "marinos33",
   "license": "MIT",
   "repository": {
