@@ -2,30 +2,12 @@
 
 A pixel companion in VS Code's Explorer that reacts to what **Claude Code** is doing: in the
 Claude Code extension's chat, and in `claude` running in VS Code's terminal. Ships with
-**Aemeath Mini** and **Sonic**; any [Codex pet](#characters) can be your companion.
-
-| Claude is… | Your companion… |
-| --- | --- |
-| thinking | tilts her head ("?") |
-| editing files | concentrates (>< face) |
-| reading files or the web | peeks |
-| searching | runs around looking |
-| running shell commands | puts her sunglasses on |
-| starting subagents | jumps |
-| waiting for you (a permission or a question) | waits, looking at you |
-| hitting an error | stumbles ("?") |
-| finished | jumps for joy |
-| idle | wanders around the panel |
-
-She shows what Claude is doing in a speech bubble, and waves when you click her.
-
-Want her in the terminal too? See
-[code-companions-terminal](https://github.com/Marinos33/code-companions-terminal).
+**Aemeath Mini** and **Sonic**.  I'm just adding characters I like.
 
 ## Install
 
 1. Get the extension:
-   - download `code-companions-0.1.0.vsix` from the
+   - download `code-companions-1.0.0.vsix` from the
      [Releases page](https://github.com/Marinos33/code-companions-vscode/releases), or
    - build it from a clone:
      ```bash
@@ -33,7 +15,7 @@ Want her in the terminal too? See
      ```
 2. Install it, then reload VS Code:
    ```bash
-   code --install-extension code-companions-0.1.0.vsix
+   code --install-extension code-companions-1.0.0.vsix
    ```
 3. Open the Explorer: **Code Companions** is a section at the bottom. You can drag it to the
    panel or another sidebar.
@@ -44,18 +26,11 @@ Want her in the terminal too? See
      are kept, and the file as it was is saved once as `settings.json.code-companions.bak`.
 5. Start a new Claude chat and ask anything.
 
-Each VS Code window reacts only to Claude Code sessions in its own workspace folders (a Claude
-Code in WSL under `/mnt/<drive>/...` counts too).
-
-**Upgrading from "Aemeath Pets"** (this extension's earlier name): connecting replaces its hooks.
-Then uninstall the old extension:
-```bash
-code --uninstall-extension aemeath-local.aemeath-pets
-```
+Each VS Code window reacts only to Claude Code sessions in its own workspace folders.
 
 ## Characters
 
-A character is a **Codex pet** folder: a `pet.json` and an 8×9 spritesheet.
+To add a custom pet, add this in `pet.json`, spritesheet must be a 8×9 spritesheet.
 ```json
 { "id": "my-pet", "displayName": "My Pet", "description": "…", "spritesheetPath": "spritesheet.webp" }
 ```
@@ -92,12 +67,6 @@ ship another, add its folder to `characters/`.
 Run **Code Companions: Disconnect from Claude Code** (it removes only its own hooks), then
 uninstall the extension.
 
-## Privacy
-
-The relay records only the hook event name, session id, folder and tool name, in
-`~/.code-companions/events.jsonl` on your computer. Never prompts, tool input or tool output.
-Nothing leaves your machine.
-
 ## Development
 
 Plain JavaScript, no dependencies, no build step.
@@ -125,5 +94,4 @@ characters/         built-in characters
 ## License
 
 The code is [MIT](LICENSE). The character art is **not** covered: Aemeath belongs to Kuro Games,
-Sonic to SEGA, and the pixel art to its authors; see [NOTICE.md](NOTICE.md). This is an
-unofficial fan project, not affiliated with Kuro Games, SEGA or Anthropic.
+Sonic to SEGA, and the pixel art to its authors; see [NOTICE.md](NOTICE.md). 

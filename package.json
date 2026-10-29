@@ -2,32 +2,74 @@
   "name": "code-companions",
   "displayName": "Code Companions",
   "description": "A pixel pet in VS Code that reacts to what Claude Code is doing: thinking, editing, reading, running commands, waiting for you.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "publisher": "marinos33",
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/Marinos33/code-companions-vscode.git" },
-  "bugs": { "url": "https://github.com/Marinos33/code-companions-vscode/issues" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Marinos33/code-companions-vscode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Marinos33/code-companions-vscode/issues"
+  },
   "homepage": "https://github.com/Marinos33/code-companions-vscode#readme",
-  "engines": { "vscode": "^1.90.0" },
-  "categories": ["Other"],
-  "keywords": ["pet", "claude", "claude code", "codex pet", "companion"],
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "pet",
+    "claude",
+    "claude code",
+    "codex pet",
+    "companion"
+  ],
   "main": "./extension.js",
   "scripts": {
     "test": "node --test test/unit.test.js"
   },
-  "activationEvents": ["onStartupFinished"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "views": {
       "explorer": [
-        { "type": "webview", "id": "codeCompanions.view", "name": "Code Companions" }
+        {
+          "type": "webview",
+          "id": "codeCompanions.view",
+          "name": "Code Companions",
+          "icon": "media/icon.svg"
+        }
       ]
     },
     "commands": [
-      { "command": "codeCompanions.connect", "title": "Connect to Claude Code", "category": "Code Companions" },
-      { "command": "codeCompanions.disconnect", "title": "Disconnect from Claude Code", "category": "Code Companions" },
-      { "command": "codeCompanions.pickCharacter", "title": "Pick a Character", "category": "Code Companions" },
-      { "command": "codeCompanions.addCharacterFolder", "title": "Add a Folder of Characters…", "category": "Code Companions" },
-      { "command": "codeCompanions.testReactions", "title": "Play Every Reaction", "category": "Code Companions" }
+      {
+        "command": "codeCompanions.connect",
+        "title": "Connect to Claude Code",
+        "category": "Code Companions"
+      },
+      {
+        "command": "codeCompanions.disconnect",
+        "title": "Disconnect from Claude Code",
+        "category": "Code Companions"
+      },
+      {
+        "command": "codeCompanions.pickCharacter",
+        "title": "Pick a Character",
+        "category": "Code Companions"
+      },
+      {
+        "command": "codeCompanions.addCharacterFolder",
+        "title": "Add a Folder of Characters…",
+        "category": "Code Companions"
+      },
+      {
+        "command": "codeCompanions.testReactions",
+        "title": "Play Every Reaction",
+        "category": "Code Companions"
+      }
     ],
     "configuration": {
       "title": "Code Companions",
@@ -39,7 +81,9 @@
         },
         "codeCompanions.characterFolders": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "default": [],
           "description": "Folders holding more characters: Codex pet folders (pet.json + spritesheet), each in its own sub-folder."
         },
@@ -63,7 +107,14 @@
         "codeCompanions.background": {
           "type": "string",
           "default": "none",
-          "enum": ["none", "night", "desk", "sakura", "city", "reactive"],
+          "enum": [
+            "none",
+            "night",
+            "desk",
+            "sakura",
+            "city",
+            "reactive"
+          ],
           "enumDescriptions": [
             "No background: the view's own colour.",
             "A starry night with the moon.",

@@ -1,7 +1,7 @@
 {
   "id": "sonic",
   "displayName": "Sonic",
-  "description": "Sonic the Hedgehog (© SEGA), from the Sonic Advance sprite sheet shared by Lucario51 on DeviantArt. See NOTICE.md.",
+  "description": "Sonic the Hedgehog (© SEGA).",
   "spritesheetPath": "spritesheet.png",
   "extraRows": {
     "asking": 4,
