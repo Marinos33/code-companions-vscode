@@ -77,9 +77,10 @@ Built in: **Aemeath Mini** (`characters/aemeath-mini`). To ship another, add its
 | --- | --- | --- |
 | `codeCompanions.character` | `aemeath-mini` | the character's id |
 | `codeCompanions.characterFolders` | `[]` | folders with more characters |
-| `codeCompanions.size` | `120` | her height in pixels |
+| `codeCompanions.size` | `120` | her largest height in pixels; she shrinks to fit a smaller view |
 | `codeCompanions.speechBubble` | `true` | say what Claude is doing |
 | `codeCompanions.wander` | `true` | walk around while idle |
+| `codeCompanions.background` | `none` | her scene: `night`, `desk`, `sakura`, `city` or `reactive` (the sky follows Claude) |
 
 ## Uninstall
 

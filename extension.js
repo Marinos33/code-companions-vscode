@@ -40,6 +40,7 @@ function activate(context) {
       size: config().get('size', 120),
       speechBubble: config().get('speechBubble', true),
       wander: config().get('wander', true),
+      background: config().get('background', 'none'),
     })
     if (lastReaction) post({ type: 'react', reaction: lastReaction })
   }
@@ -60,7 +61,8 @@ function activate(context) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="${webview.asWebviewUri(vscode.Uri.joinPath(media, 'pet.css'))}">
 </head><body>
-<div id="stage"><div id="bubble" hidden></div><canvas id="pet"></canvas></div>
+<div id="stage"><canvas id="bg" hidden></canvas><div id="bubble" hidden></div><canvas id="pet"></canvas></div>
+<script nonce="${nonce}" src="${webview.asWebviewUri(vscode.Uri.joinPath(media, 'backgrounds.js'))}"></script>
 <script nonce="${nonce}" src="${webview.asWebviewUri(vscode.Uri.joinPath(media, 'pet.js'))}"></script>
 </body></html>`
   }

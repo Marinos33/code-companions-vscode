@@ -8,14 +8,16 @@
   <link rel="stylesheet" href="../media/pet.css">
   <style>
     body { background: #1e1e1e; font: 13px system-ui, sans-serif; color: #ccc; }
-    .panel { width: 320px; border: 1px solid #333; margin: 12px; }
+    .panel { width: 320px; height: 180px; border: 1px solid #333; margin: 12px; resize: both; overflow: hidden; }
     .buttons { margin: 12px; display: flex; flex-wrap: wrap; gap: 6px; max-width: 520px; }
-    button { background: #333; color: #ddd; border: 1px solid #555; padding: 4px 8px; cursor: pointer; }
+    button, select { background: #333; color: #ddd; border: 1px solid #555; padding: 4px 8px; cursor: pointer; }
   </style>
 </head>
 <body>
-  <div class="panel"><div id="stage"><div id="bubble" hidden></div><canvas id="pet"></canvas></div></div>
+  <div class="panel"><div id="stage"><canvas id="bg" hidden></canvas><div id="bubble" hidden></div><canvas id="pet"></canvas></div></div>
+  <div class="buttons"><select id="scene" aria-label="Background"></select></div>
   <div class="buttons" id="buttons"></div>
+  <script src="../media/backgrounds.js"></script>
   <script src="../media/pet.js"></script>
   <script>
     // The reactions src/behaviors.js gives for these events (copied: this page has no require).
@@ -38,7 +40,22 @@
       b.onclick = () => petTest.receive({ type: 'react', reaction })
       box.append(b)
     }
-    petTest.receive({ type: 'setup', size: 120, speechBubble: true, wander: true, character: { id: 'aemeath-mini', name: 'Aemeath Mini', sheet: '../characters/aemeath-mini/spritesheet.webp' } })
+    // ?bg=night (or desk, sakura, city, reactive) picks the scene, ?w= and ?h= the view's size,
+    // ?react=thinking (or another button's name) a reaction to start with.
+    const params = new URLSearchParams(location.search)
+    let background = params.get('bg') || 'none'
+    const panel = document.querySelector('.panel')
+    if (params.get('w')) panel.style.width = `${params.get('w')}px`
+    if (params.get('h')) panel.style.height = `${params.get('h')}px`
+    const setup = () => petTest.receive({ type: 'setup', size: 120, speechBubble: true, wander: true, background, character: { id: 'aemeath-mini', name: 'Aemeath Mini', sheet: '../characters/aemeath-mini/spritesheet.webp' } })
+    const scene = document.getElementById('scene')
+    for (const name of ['none', ...Object.keys(petBackgrounds)]) scene.append(new Option(name, name, false, name === background))
+    scene.onchange = () => {
+      background = scene.value
+      setup()
+    }
+    setup()
+    if (reactions[params.get('react')]) petTest.receive({ type: 'react', reaction: reactions[params.get('react')] })
   </script>
 </body>
 </html>

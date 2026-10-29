@@ -48,7 +48,7 @@
           "default": 120,
           "minimum": 48,
           "maximum": 400,
-          "description": "The pet's height in pixels."
+          "description": "The pet's largest height in pixels: she shrinks to fit a smaller view, never cut by its edges."
         },
         "codeCompanions.speechBubble": {
           "type": "boolean",
@@ -59,6 +59,20 @@
           "type": "boolean",
           "default": true,
           "description": "Let the pet walk around while Claude is idle."
+        },
+        "codeCompanions.background": {
+          "type": "string",
+          "default": "none",
+          "enum": ["none", "night", "desk", "sakura", "city", "reactive"],
+          "enumDescriptions": [
+            "No background: the view's own colour.",
+            "A starry night with the moon.",
+            "A coding corner: a screen scrolling code, faster while Claude works, and a plant.",
+            "Cherry blossoms, petals falling.",
+            "A white city of the future, its tower ringed with green holograms.",
+            "A sky that follows Claude: day when idle, dusk while it works, sunrise when done, rain on a failure."
+          ],
+          "description": "The scene the pet stands in."
         }
       }
     }

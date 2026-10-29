@@ -9,33 +9,65 @@
   const WALK_PX_PER_S = 55
   // A sticky reaction gives way to wandering if no event comes for this long (a missed Stop).
   const STICKY_MAX_MS = 120000
+  // Room kept above her for the speech bubble, and the smallest she shrinks to in a tiny view.
+  const BUBBLE_ROOM = 44
+  const MIN_SIZE = 16
+  // A background cell is about this many times smaller than her height, in whole screen pixels.
+  const BG_CELLS_PER_PET = 54
 
   const vscode = typeof acquireVsCodeApi === 'function' ? acquireVsCodeApi() : null
   const stage = document.getElementById('stage')
   const canvas = document.getElementById('pet')
   const bubble = document.getElementById('bubble')
   const ctx = canvas.getContext('2d')
+  const bg = document.getElementById('bg')
+  const bgCtx = bg.getContext('2d')
 
   let sheet = null
+  // The height asked for in the settings, and the one she is drawn at: as large as that, as long
+  // as the view fits her whole.
+  let wantedSize = 120
   let size = 120
   let isBubbleOn = true
   let isWanderOn = true
-  const pet = { x: 0, targetX: 0, anim: 'idle', frame: 0, mode: 'idle', until: 0, line: '', isSticky: false }
+  let scene = null
+  let bgScale = 1
+  const pet = { x: 0, targetX: 0, anim: 'idle', frame: 0, mode: 'idle', until: 0, line: '', isSticky: false, behavior: 'idle' }
 
   const frameW = () => sheet.naturalWidth / 8
   const frameH = () => sheet.naturalHeight / 9
   const petW = () => Math.round((size * frameW()) / frameH())
 
+  function fitSize() {
+    const room = stage.clientHeight - (isBubbleOn ? BUBBLE_ROOM : 0)
+    const byWidth = sheet ? (stage.clientWidth * frameH()) / frameW() : Infinity
+    return Math.max(MIN_SIZE, Math.floor(Math.min(wantedSize, room, byWidth)))
+  }
+
   function layout() {
     const dpr = window.devicePixelRatio || 1
     const w = stage.clientWidth
+    size = fitSize()
+    bubble.style.bottom = `${size + 4}px`
     canvas.style.width = `${w}px`
     canvas.style.height = `${size}px`
     canvas.width = Math.round(w * dpr)
     canvas.height = Math.round(size * dpr)
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     ctx.imageSmoothingEnabled = false
-    if (sheet) pet.x = Math.min(Math.max(0, pet.x), Math.max(0, w - petW()))
+    bg.hidden = !scene
+    if (scene) {
+      bgScale = Math.max(1, Math.round(size / BG_CELLS_PER_PET))
+      bg.width = Math.ceil(w / bgScale)
+      bg.height = Math.ceil(stage.clientHeight / bgScale)
+      bg.style.width = `${bg.width * bgScale}px`
+      bg.style.height = `${bg.height * bgScale}px`
+    }
+    if (sheet) {
+      const maxX = Math.max(0, w - petW())
+      pet.x = Math.min(Math.max(0, pet.x), maxX)
+      pet.targetX = Math.min(Math.max(0, pet.targetX), maxX)
+    }
   }
 
   function setAnim(anim) {
@@ -65,6 +97,7 @@
       setAnim(roll > 0.9 ? 'waving' : 'idle')
       pet.until = now + 2000 + Math.random() * 3000
     }
+    pet.behavior = 'idle'
     say('')
   }
 
@@ -76,12 +109,14 @@
       if (pet.mode === 'react' && !pet.isSticky) return
       pet.mode = 'idle'
       pet.until = 0
+      pet.behavior = 'idle'
       setAnim('idle')
       say('')
       return
     }
     pet.mode = 'react'
     pet.isSticky = !!reaction.sticky
+    pet.behavior = reaction.behavior
     setAnim(reaction.anim)
     say(reaction.line)
     pet.until = now + (reaction.sticky ? STICKY_MAX_MS : reaction.ms || 2000)
@@ -104,6 +139,7 @@
         if (Math.abs(delta) <= step) {
           pet.x = pet.targetX
           pet.mode = 'idle'
+          pet.behavior = 'idle'
           setAnim('idle')
           pet.until = now + 1500 + Math.random() * 3000
         } else {
@@ -112,13 +148,18 @@
       } else if (now >= pet.until) {
         nextIdleMove(now)
       }
-      draw()
+      draw(now)
     }
     requestAnimationFrame(tick)
   }
 
-  function draw() {
+  function draw(now) {
     const w = petW()
+    if (scene) {
+      // Bottom-aligned, so a rounded-up cell goes off the top, never under her feet.
+      bg.style.top = `${stage.clientHeight - bg.height * bgScale}px`
+      scene(bgCtx, bg.width, bg.height, now, pet.behavior)
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     const row = ROWS.indexOf(pet.anim)
     ctx.drawImage(sheet, pet.frame * frameW(), row * frameH(), frameW(), frameH(), Math.round(pet.x), 0, w, size)
@@ -130,10 +171,11 @@
   }
 
   function setup(message) {
-    size = message.size || 120
+    wantedSize = message.size || 120
     isBubbleOn = message.speechBubble !== false
     isWanderOn = message.wander !== false
-    stage.style.height = `${size + 44}px`
+    scene = (window.petBackgrounds || {})[message.background] || null
+    layout()
     const img = new Image()
     img.onload = () => {
       sheet = img
